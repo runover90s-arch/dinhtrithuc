@@ -1,0 +1,18 @@
+{
+  "rules": {
+    "rooms": {
+      "$code": {
+        ".read": "auth != null",
+        ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() == auth.uid) || data.child('hostUid').val() == auth.uid)",
+        "players": {
+          "$uid": {
+            ".write": "auth != null && auth.uid == $uid && !data.exists() && newData.child('uid').val() == auth.uid && newData.child('score').val() == 0 && newData.child('name').isString() && newData.child('name').val().length <= 32"
+          }
+        },
+        "buzz": {
+          ".write": "auth != null && !data.exists() && newData.child('uid').val() == auth.uid && data.parent().child('players').child(auth.uid).exists() && data.parent().child('status').val() == 'question'"
+        }
+      }
+    }
+  }
+}
